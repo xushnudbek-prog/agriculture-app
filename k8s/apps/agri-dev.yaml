@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: agri-app
+  namespace: argocd
+
+spec:
+  source:
+    repoURL: "https://github.com/xushnudbek-prog/agriculture-app.git"
+    targetRevision: HEAD
+    path: k8s/helm/agri-app
+    helm:
+      values:
+        file: k8s/helm/agri-app/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: agri-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
