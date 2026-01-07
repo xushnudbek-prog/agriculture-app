@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/home")
     public String home() {
-        return "Agri DevOps Demo: running";
+        return "Hnigga";
     }
 
 }
