@@ -10,11 +10,11 @@ service:
   targetPort: 8080
 resources:
   limits:
+    cpu: 50m
+    memory: 65Mi
+  requests:
     cpu: 100m
     memory: 256Mi
-  requests:
-    cpu: 500m
-    memory: 512Mi
 probes:
   readinessPath: /actuator/health/readiness
   livenessPath: /actuator/health/liveness
