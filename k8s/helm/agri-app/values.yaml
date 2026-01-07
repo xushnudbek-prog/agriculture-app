@@ -1,11 +1,11 @@
 replicaCount: 2
 image:
   repository: xushnudbek-prog/agriculture-app
-  tag: '0975668'
+  tag: "0975668"
   pullPolicy: IfNotPresent
   registry: ghcr.io
 service:
-  type: ClusterIP
+  type: NodePort
   port: 8080
   targetPort: 8080
 resources:
