@@ -1,0 +1,72 @@
+name: Build and Register
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: "Repository"
+        required: true
+        default: "xushnudbek-prog/agriculture-app"
+        type: choice
+        options:
+          - "xushnudbek-prog/agriculture-app"
+
+      branch:
+        description: "Branch"
+        required: true
+        default: "main"
+        type: choice
+        options:
+          - "main"
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Get checkout commit sha
+        id: repo-sha
+        run: |
+          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Maven Build
+        run: mvn clean package -DskipTests
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.CI_USER }}
+          password: ${{ secrets.CI_TOKEN }}
+
+      - name: Push image to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ steps.repo-sha.outputs.sha }}
+
+      - name: Update GitOps repository
+        uses: fjogeleit/yaml-update-action@v0.15.0
+        with:
+          branch: main
+          valueFile: "helm/agri-app/values.yaml"
+          changes: |
+            {
+              "image.registry": "ghcr.io",
+              "image.repository": "${{ github.repository }}",
+              "image.tag": "${{ github.event.inputs.environment }}${{ steps.repo-sha.outputs.sha }}"
+            }
+          commitChange: true
+          message: "Updatechore(deploy): update image to ${{ steps.repo-sha.outputs.sha }}"
