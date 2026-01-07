@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
   repository: xushnudbek-prog/agriculture-app
-  tag: 65a2de1
+  tag: 8fe9088
   pullPolicy: IfNotPresent
   registry: ghcr.io
 service:
