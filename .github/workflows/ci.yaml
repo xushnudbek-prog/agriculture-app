@@ -63,7 +63,7 @@ jobs:
         uses: fjogeleit/yaml-update-action@v0.15.0
         with:
           branch: main
-          valueFile: "helm/agri-app/values.yaml"
+          valueFile: "k8s/helm/agri-app/values.yaml"
           changes: |
             {
               "image.registry": "ghcr.io",
