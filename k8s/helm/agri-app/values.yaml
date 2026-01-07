@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
   repository: xushnudbek-prog/agriculture-app
-  tag: 5e013a1
+  tag: "0975668"
   pullPolicy: IfNotPresent
   registry: ghcr.io
 service:
@@ -10,11 +10,11 @@ service:
   targetPort: 8080
 resources:
   limits:
-    cpu: 50m
-    memory: 65Mi
-  requests:
     cpu: 100m
     memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
 probes:
   readinessPath: /actuator/health/readiness
   livenessPath: /actuator/health/liveness
