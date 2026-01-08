@@ -71,4 +71,4 @@ jobs:
               "image.tag": "${{ github.event.inputs.environment }}${{ steps.repo-sha.outputs.sha }}"
             }
           commitChange: true
-          message: "Updatechore(deploy): update image to ${{ steps.repo-sha.outputs.sha }}"
+          message: "chore(deploy): update image to ${{ steps.repo-sha.outputs.sha }}"
