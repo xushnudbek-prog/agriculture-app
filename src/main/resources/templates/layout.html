@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriTech Platform</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fas fa-seedling"></i> AgriTech
+            </div>
+
+            <nav>
+                <a href="/" class="nav-link" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">
+                    <i class="fas fa-chart-pie"></i> Dashboard
+                </a>
+                <a href="/farmers" class="nav-link"
+                    th:classappend="${#httpServletRequest.requestURI == '/farmers' ? 'active' : ''}">
+                    <i class="fas fa-tractor"></i> Farmers
+                </a>
+                <a href="/suppliers" class="nav-link"
+                    th:classappend="${#httpServletRequest.requestURI == '/suppliers' ? 'active' : ''}">
+                    <i class="fas fa-truck"></i> Suppliers
+                </a>
+                <a href="/orders" class="nav-link"
+                    th:classappend="${#httpServletRequest.requestURI == '/orders' ? 'active' : ''}">
+                    <i class="fas fa-file-invoice"></i> Orders
+                </a>
+            </nav>
+        </aside>
+
+        <!-- CONTENT AREA -->
+        <main class="main-content">
+            <!-- Header -->
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                <div>
+                    <h2 style="margin:0;">Overview</h2>
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Welcome back to your procurement
+                        dashboard</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="btn-outline"><i class="far fa-bell"></i></button>
+                    <div
+                        style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                        JD
+                    </div>
+                </div>
+            </header>
+
+            <div layout:fragment="content"></div>
+        </main>
+    </div>
+
+</body>
+
+</html>

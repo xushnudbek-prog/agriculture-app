@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Orders</title>
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h2 style="margin: 0;">Order History</h2>
+                <span style="color: var(--text-muted);">View and track all transactions</span>
+            </div>
+            <div class="search-wrapper" style="width: 300px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search orders...">
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th style="padding-left: 1.5rem;">Order Details</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th style="text-align: right; padding-right: 1.5rem;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td style="padding-left: 1.5rem;">
+                            <span style="font-weight: 600; color: var(--text-main);" th:text="${order.id}">ID</span>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);"
+                                th:text="'Ref: ' + ${order.farmerId}">Ref</div>
+                        </td>
+                        <td th:text="${order.productId}">Product</td>
+                        <td th:text="${order.quantity}">0</td>
+                        <td style="font-weight: 600;" th:text="${#numbers.formatCurrency(order.totalPrice)}">$0.00</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="far fa-calendar" style="color: var(--text-muted);"></i>
+                                <span th:text="${order.orderDate}">Date</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span
+                                th:class="'badge-soft ' + (${order.status} == 'DELIVERED' ? 'badge-success' : 'badge-warning')"
+                                th:text="${order.status}"></span>
+                        </td>
+                        <td style="text-align: right; padding-right: 1.5rem;">
+                            <button class="btn-outline"
+                                style="border: none; color: var(--text-muted); padding: 0.25rem;">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

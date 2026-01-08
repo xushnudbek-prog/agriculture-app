@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+
+        <!-- METRICS GRID -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+            <!-- Metric 1 -->
+            <div class="card metric-card">
+                <div>
+                    <span class="metric-label">Total Farmers</span>
+                    <div class="metric-value" th:text="${farmers.size()}">0</div>
+                </div>
+                <div class="icon-box primary">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+
+            <!-- Metric 2 -->
+            <div class="card metric-card">
+                <div>
+                    <span class="metric-label">Suppliers</span>
+                    <div class="metric-value" th:text="${suppliers.size()}">0</div>
+                </div>
+                <div class="icon-box secondary">
+                    <i class="fas fa-truck-loading"></i>
+                </div>
+            </div>
+
+            <!-- Metric 3 -->
+            <div class="card metric-card">
+                <div>
+                    <span class="metric-label">Active Orders</span>
+                    <div class="metric-value" th:text="${orders.size()}">0</div>
+                </div>
+                <div class="icon-box accent">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+
+            <!-- Recent Orders Table -->
+            <div class="card" style="padding: 0;">
+                <div
+                    style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-size: 1.125rem;">Recent Orders</h3>
+                    <a href="/orders" class="btn-outline" style="font-size: 0.875rem; padding: 0.25rem 0.75rem;">View
+                        All</a>
+                </div>
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th style="padding-left: 1.5rem;">Product</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order, stat : ${orders}" th:if="${stat.index < 5}">
+                            <td style="padding-left: 1.5rem;">
+                                <div style="font-weight: 500;" th:text="${order.productId}">Product</div>
+                                <small class="text-muted" th:text="${order.id}">#ID</small>
+                            </td>
+                            <td style="font-weight: 600;" th:text="${#numbers.formatCurrency(order.totalPrice)}">$0.00
+                            </td>
+                            <td>
+                                <span
+                                    th:class="'badge-soft ' + (${order.status} == 'DELIVERED' ? 'badge-success' : 'badge-warning')"
+                                    th:text="${order.status}"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Chart -->
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.125rem;">Order Distribution</h3>
+                <div style="height: 250px; position: relative;">
+                    <canvas id="orderChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            // Simple Chart config
+            const ctx = document.getElementById('orderChart').getContext('2d');
+            const orders = /*[[${orders}]]*/[];
+            const counts = {};
+            orders.forEach(o => counts[o.status] = (counts[o.status] || 0) + 1);
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(counts),
+                    datasets: [{
+                        data: Object.values(counts),
+                        backgroundColor: ['#10B981', '#F59E0B', '#3B82F6', '#EF4444'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+                    },
+                    cutout: '75%'
+                }
+            });
+            /*]]>*/
+        </script>
+    </div>
+
+</body>
+
+</html>
