@@ -12,6 +12,15 @@ data:
       evaluation_interval: 15s
 
     scrape_configs:
+      - job_name: 'agri-app'
+        metrics_path: /actuator/prometheus
+        kubernetes_sd_configs:
+        - role: endpoints
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_namespace]
+          action: keep
+          regex: agri-app;agri-dev
+
       - job_name: 'kubernetes-apiservers'
         kubernetes_sd_configs:
         - role: endpoints
