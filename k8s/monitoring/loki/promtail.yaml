@@ -18,6 +18,14 @@ data:
       - url: http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push
 
     scrape_configs:
+      - job_name: kubernetes-pods-static
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: kubernetes-pods-static
+              __path__: /var/log/pods/*/*/*.log
+
       - job_name: kubernetes-pods
         kubernetes_sd_configs:
           - role: pod
@@ -48,7 +56,7 @@ data:
               - __meta_kubernetes_pod_container_name
             separator: ;
             regex: ^(.+);(.+);(.+);(.+)$
-            replacement: /var/log/pods/$1_$2_$3/$4/*.log
+            replacement: /var/log/pods/$1_$2_$3/*/*.log
             target_label: __path__
 ---
 apiVersion: apps/v1
