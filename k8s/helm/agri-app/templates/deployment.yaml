@@ -22,6 +22,10 @@ spec:
     metadata:
       labels:
         app: agri-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "{{ .Values.service.targetPort }}"
     spec:
       containers:
         - name: agri-app
